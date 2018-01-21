@@ -1,0 +1,61 @@
+
+#include "fiber/ClientSocketTCP.h"
+
+#include "nucleus/Logging.h"
+
+namespace fi {
+
+ClientSocketTCP::ClientSocketTCP() = default;
+
+ClientSocketTCP::~ClientSocketTCP() {
+  disconnect();
+}
+
+bool ClientSocketTCP::connect(const Endpoint &endpoint) {
+  m_handle = ::socket(AF_INET, SOCK_STREAM, 0);
+  if (m_handle == kInvalidSocketHandle) {
+    LOG(Error) << "Could not create socket.";
+    return false;
+  }
+
+  // Create the address structure that we're going to use to connect.
+  sockaddr_in addr;
+  std::memset(&addr, 0, sizeof(addr));
+  addr.sin_addr.s_addr = endpoint.getIpAddress().getValue();
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons(endpoint.getPort());
+
+  // Connect the socket to the remote address.
+  if (::connect(m_handle, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1) {
+    LOG(Error) << "Could not connect to: " << endpoint;
+    return false;
+  }
+
+  m_isConnected = true;
+
+  return true;
+}
+
+void ClientSocketTCP::disconnect() {
+  if (m_handle != kInvalidSocketHandle) {
+#if OS(WIN)
+    ::closesocket(m_handle);
+#elif OS(POSIX)
+    ::close(m_handle);
+#else
+#error "Don't know how to close this socket"
+#endif
+  }
+
+  m_isConnected = false;
+}
+
+bool ClientSocketTCP::receive(U8 *buffer, U32 bytesRead) {
+  return false;
+}
+
+bool ClientSocketTCP::send(const U8 *buffer, I32 *bytesRead) {
+  return false;
+}
+
+}  // namespace fi

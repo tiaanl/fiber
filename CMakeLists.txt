@@ -14,6 +14,7 @@ set(fiber_HEADER_FILES
     "include/fiber/Endpoint.h"
     "include/fiber/Resolver.h"
     "include/fiber/Win/Winsock.h"
+    "include/fiber/ClientSocketTCP.h"
     )
 
 set(fiber_SOURCE_FILES
@@ -23,6 +24,7 @@ set(fiber_SOURCE_FILES
     "src/IpAddress.cpp"
     "src/Resolver.cpp"
     "src/Win/Winsock.cpp"
+    "src/ClientSocketTCP.cpp"
     )
 
 add_library(fiber ${fiber_HEADER_FILES} ${fiber_SOURCE_FILES})
@@ -36,6 +38,7 @@ set(fiber_TEST_FILES
     "tests/SocketTests.cpp"
     "tests/IpAddressTests.cpp"
     "tests/ResolverTests.cpp"
+    "tests/ClientSocketTCPTests.cpp"
     )
 
 add_executable(FiberTests ${fiber_TEST_FILES})

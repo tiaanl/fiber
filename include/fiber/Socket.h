@@ -17,7 +17,7 @@ public:
   virtual bool receive(U8* buffer, U32 bytesRead) = 0;
   virtual bool send(const U8* buffer, I32* bytesRead) = 0;
 
-private:
+protected:
   SocketHandle m_handle = kInvalidSocketHandle;
 };
 
