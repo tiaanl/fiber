@@ -18,8 +18,8 @@ public:
     return m_isConnected;
   }
 
-  bool receive(U8* buffer, U32 bytesRead) override;
-  bool send(const U8* buffer, I32* bytesRead) override;
+  I32 receive(U8 *buffer, I32 bufferSize) override;
+  I32 send(const U8 *buffer, I32 bufferSize) override;
 
 private:
   bool m_isConnected = false;
