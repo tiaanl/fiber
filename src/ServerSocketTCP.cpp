@@ -3,14 +3,19 @@
 
 #include "nucleus/Logging.h"
 
-namespace fi {
+#if OS(POSIX)
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#endif
 
+namespace fi {
 
 ServerSocketTCP::ServerSocketTCP() = default;
 
 ServerSocketTCP::~ServerSocketTCP() = default;
 
-void ServerSocketTCP::listen(const Endpoint &endpoint) {
+void ServerSocketTCP::listen(const Endpoint& endpoint) {
   // Create the socket.
   m_handle = ::socket(PF_INET, SOCK_STREAM, 0);
 
@@ -47,7 +52,11 @@ Socket ServerSocketTCP::accept() {
 
   // Accept a new connection.
   sockaddr_in addr;
+#if OS(WIN)
   I32 size = sizeof(addr);
+#elif OS(POSIX)
+  socklen_t size = sizeof(addr);
+#endif
   SocketHandle remote = ::accept(m_handle, reinterpret_cast<sockaddr*>(&addr), &size);
   if (remote == kInvalidSocketHandle) {
     LOG(Error) << "Could not accept new connection.";

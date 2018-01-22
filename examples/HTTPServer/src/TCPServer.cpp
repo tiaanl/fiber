@@ -17,6 +17,7 @@ int main() {
   const char* buffer =
       "HTTP/1.1 200 OK\r\n"
       "Host: localhost\r\n"
+      "Connection: close\r\n"
       "Content-length: %d\r\n"
       "Content-type: text/html\r\n"
       "\r\n";
@@ -24,6 +25,7 @@ int main() {
   nu::Array<char, 1024> sendBuffer;
   std::sprintf(sendBuffer.getData(), "%s%s", buffer, content);
   std::sprintf(sendBuffer.getData(), sendBuffer.getData(), std::strlen(content));
+  USize sendBufferLength = std::strlen(sendBuffer.getData());
 
   nu::Array<U8, 1024> receiveBuffer;
   for (;;) {
@@ -34,7 +36,7 @@ int main() {
     receiveBuffer[bytesReceived] = 0;
     LOG(Info) << receiveBuffer.getData();
 
-    auto bytesSent = newSocket.send((const U8*)sendBuffer.getData(), sendBuffer.getSize());
+    auto bytesSent = newSocket.send((const U8*)sendBuffer.getData(), sendBufferLength);
     LOG(Info) << "Bytes sent = " << bytesSent;
   }
 

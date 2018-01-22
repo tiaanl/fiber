@@ -3,6 +3,7 @@
 #define FIBER_SOCKET_HANDLE_H_
 
 #include "nucleus/Config.h"
+#include "nucleus/Types.h"
 #include "nucleus/Win/WindowsMixin.h"
 
 namespace fi {

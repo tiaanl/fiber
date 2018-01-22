@@ -35,6 +35,7 @@ if(WIN32)
     target_link_libraries(fiber PUBLIC "Ws2_32")
 endif()
 target_include_directories(fiber PUBLIC "include")
+set_property(TARGET fiber PROPERTY CXX_STANDARD 11)
 
 set(fiber_TEST_FILES
     "tests/SocketTests.cpp"
@@ -45,6 +46,7 @@ set(fiber_TEST_FILES
 
 add_executable(FiberTests ${fiber_TEST_FILES})
 target_link_libraries(FiberTests PUBLIC fiber catch2)
+set_property(TARGET FiberTests PROPERTY CXX_STANDARD 11)
 
 add_subdirectory("external" "fiber_external")
 add_subdirectory("examples" "fiber_examples")

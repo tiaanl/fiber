@@ -1,7 +1,13 @@
 
 #include "fiber/IpAddress.h"
 
+#if OS(WIN)
 #include "nucleus/Win/WindowsMixin.h"
+#elif OS(POSIX)
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#endif
 
 namespace fi {
 
@@ -28,14 +34,14 @@ void IpAddress::setValue(U32 value) {
 }
 
 nu::String IpAddress::toString() const {
-  in_addr addr = {0, 0, 0, 0};
+  in_addr addr;
   addr.s_addr = m_value;
   const char* str = inet_ntoa(addr);
   return nu::String{str};
 }
 
-bool operator==(const IpAddress &left, const IpAddress &right) {
-    return left.m_value == right.m_value;
+bool operator==(const IpAddress& left, const IpAddress& right) {
+  return left.m_value == right.m_value;
 }
 
 }  // namespace fi

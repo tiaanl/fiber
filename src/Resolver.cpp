@@ -2,7 +2,15 @@
 #include "fiber/Resolver.h"
 
 #include "nucleus/Logging.h"
+
+#if OS(WIN)
 #include "nucleus/Win/WindowsMixin.h"
+#elif OS(POSIX)
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#endif
 
 namespace fi {
 
@@ -10,6 +18,7 @@ IpAddress resolve(const nu::String& host) noexcept {
   hostent* remoteHost;
 
   remoteHost = gethostbyname(host.getRawBytes());
+#if OS(WIN)
   if (!remoteHost) {
     DWORD errorCode = WSAGetLastError();
     switch (errorCode) {
@@ -26,6 +35,7 @@ IpAddress resolve(const nu::String& host) noexcept {
         return {};
     }
   }
+#endif  // OS(WIN)
 
   LOG(Info) << "resolve returned:";
 
@@ -54,7 +64,7 @@ IpAddress resolve(const nu::String& host) noexcept {
   LOG(Info) << "  Address length: " << remoteHost->h_length;
 
   if (remoteHost->h_addrtype == AF_INET) {
-    in_addr addr = {0, 0, 0, 0};
+    in_addr addr;
     I32 addrIndex = 0;
     while (remoteHost->h_addr_list[addrIndex]) {
       addr.s_addr = *(u_long*)remoteHost->h_addr_list[addrIndex];

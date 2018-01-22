@@ -2,6 +2,7 @@
 #ifndef FIBER_WIN_WINSOCK_H_
 #define FIBER_WIN_WINSOCK_H_
 
+#include "nucleus/Config.h"
 #include "nucleus/Macros.h"
 #include "nucleus/Win/WindowsMixin.h"
 
@@ -16,7 +17,9 @@ public:
   ~ScopedWinsockInitializer();
 
 private:
+#if OS(WIN)
   WSADATA m_wsaData;
+#endif
 };
 
 }  // namespace fi
