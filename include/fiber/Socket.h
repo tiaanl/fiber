@@ -12,10 +12,11 @@ public:
   static SocketHandle kInvalidSocketHandle;
 
   Socket();
+  explicit Socket(SocketHandle socket);
   virtual ~Socket();
 
-  virtual I32 receive(U8* buffer, I32 bufferSize) = 0;
-  virtual I32 send(const U8* buffer, I32 bufferSize) = 0;
+  virtual I32 receive(U8* buffer, I32 bufferSize);
+  virtual I32 send(const U8* buffer, I32 bufferSize);
 
 protected:
   SocketHandle m_handle = kInvalidSocketHandle;

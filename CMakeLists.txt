@@ -15,6 +15,7 @@ set(fiber_HEADER_FILES
     "include/fiber/Resolver.h"
     "include/fiber/Win/Winsock.h"
     "include/fiber/ClientSocketTCP.h"
+    "include/fiber/ServerSocketTCP.h"
     )
 
 set(fiber_SOURCE_FILES
@@ -25,6 +26,7 @@ set(fiber_SOURCE_FILES
     "src/Resolver.cpp"
     "src/Win/Winsock.cpp"
     "src/ClientSocketTCP.cpp"
+    "src/ServerSocketTCP.cpp"
     )
 
 add_library(fiber ${fiber_HEADER_FILES} ${fiber_SOURCE_FILES})
@@ -44,4 +46,5 @@ set(fiber_TEST_FILES
 add_executable(FiberTests ${fiber_TEST_FILES})
 target_link_libraries(FiberTests PUBLIC fiber catch2)
 
-add_subdirectory("external" "external")
+add_subdirectory("external" "fiber_external")
+add_subdirectory("examples" "fiber_examples")
